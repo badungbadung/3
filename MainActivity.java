@@ -1,107 +1,50 @@
-package org.androidtown.dbtest;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-import java.io.*;
-import java.net.*;
 
-public class MainActivity extends Activity {
-    EditText userId, userPwd;
-    Button loginBtn, joinBtn;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        userId = (EditText) findViewById(R.id.userId);
-        userPwd = (EditText) findViewById(R.id.userPwd);
-        loginBtn = (Button) findViewById(R.id.loginBtn);
-        joinBtn = (Button) findViewById(R.id.joinBtn);
-        loginBtn.setOnClickListener(btnListener);
-        joinBtn.setOnClickListener(btnListener);
-    }
-    class CustomTask extends AsyncTask<String, Void, String> {
-        String sendMsg, receiveMsg;
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-                String str;
-                URL url = new URL("http://106.249.39.86:8080/test/data.jsp");
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                conn.setRequestMethod("POST");
-                OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
-                sendMsg = "id="+strings[0]+"&pw="+strings[1]+"&type="+strings[2];
-                osw.write(sendMsg);
-                osw.flush();
-                if(conn.getResponseCode() == conn.HTTP_OK) {
-                    InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
-                    BufferedReader reader = new BufferedReader(tmp);
-                    StringBuffer buffer = new StringBuffer();
-                    while ((str = reader.readLine()) != null) {
-                        buffer.append(str);
-                    }
-                    receiveMsg = buffer.toString();
+//¾Èµå·ÎÀÌµå¿¡¼­ ¼ÒÄÏ Å¬¶óÀÌ¾ğÆ®¸¦ »ç¿ëÇÏ´Â ¸ŞÀÎ ¾×Æ¼ºñÆ¼ÀÇ ÄÚµå 
 
-                } else {
-                    Log.i("í†µì‹  ê²°ê³¼", conn.getResponseCode()+"ì—ëŸ¬");
-                }
+public class MainActivity extends AppCompatActivity {
+	
+	public void onCreat(Bundle savedInstanceState){
+		public void onClick(view v) {
+			String addr = input01.getText().toString().trim();
+			
+			ConnectThread thread = new ConnectThread(addr);
+			thread.start();
+		}
+	});
+}
 
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return receiveMsg;
-        }
-    }
 
-    View.OnClickListener btnListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.loginBtn : // ë¡œê·¸ì¸ ë²„íŠ¼ ëˆŒë €ì„ ê²½ìš°
-                    String loginid = userId.getText().toString();
-                    String loginpwd = userPwd.getText().toString();
-                    try {
-                        String result  = new CustomTask().execute(loginid,loginpwd,"login").get();
-                        if(result.equals("true")) {
-                            Toast.makeText(MainActivity.this,"ë¡œê·¸ì¸",Toast.LENGTH_SHORT).show();
-                        } else if(result.equals("false")) {
-                            Toast.makeText(MainActivity.this,"ì•„ì´ë””or ë¹„ë°€ë²ˆí˜¸ê°€ ë‹¤ë¦„",Toast.LENGTH_SHORT).show();
-                            userId.setText("");
-                            userPwd.setText("");
-                        } else if(result.equals("noId")) {
-                            Toast.makeText(MainActivity.this,"ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ì•„ì´ë””",Toast.LENGTH_SHORT).show();
-                            userId.setText("");
-                            userPwd.setText("");
-                        }
-                    }catch (Exception e) {}
-                    break;
-                case R.id.joinBtn : // íšŒì›ê°€ì…
-                    String joinid = userId.getText().toString();
-                    String joinpwd = userPwd.getText().toString();
-                    try {
-                        String result  = new CustomTask().execute(joinid,joinpwd,"join").get();
-                        if(result.equals("id")) {
-                            Toast.makeText(MainActivity.this,"ì¡´ì¬í•˜ëŠ” ì•„ì´ë””ì…ë‹ˆë‹¤.",Toast.LENGTH_SHORT).show();
-                            userId.setText("");
-                            userPwd.setText("");
-                        } else if(result.equals("ok")) {
-                            userId.setText("");
-                            userPwd.setText("");
-                            Toast.makeText(MainActivity.this,"íšŒì›ê°€ì…ì„ ì¶•í•˜í•©ë‹ˆë‹¤.",Toast.LENGTH_SHORT).show();
-                        }
-                    }catch (Exception e) {}
-                    break;
-            }
-        }
-    };
+
+class ConnectThread extends Thread{
+	String hostname;
+	
+	public ConnectThread(String addr){
+		hostname = addr;
+	}
+	
+	public void run(){
+		try{
+			int port = 11001;
+			Socket sock = new Socket(hostname, port);
+			
+			ObjectOutputStream outsream = new ObjectOutputStream(sock.getOutputStream());
+			outstream.writeObject("Hello AndroidTown on Android");
+			outstream.flush();
+			
+			ObjectInputStream instream = new ObjectInputStream(sock.getInputStream());
+			String obj = (String) instream.readObject();
+			
+			Log.d("MainActivity","¼­¹ö¿¡¼­ ¹ŞÀº ¸Ş½ÃÁö : " + obj);
+			
+			sock.close();
+			
+		} catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
+ }
 }

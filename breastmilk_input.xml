@@ -1,0 +1,129 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/BMtime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:gravity="center"
+        android:paddingBottom="15dp"
+        android:text="시간"
+        android:textColor="#fd7e6d"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="100dp"
+            android:paddingTop="5dp"
+            android:text="수유 시간"
+            android:textColor="#7d7d7d"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="85dp"
+            android:weightSum="1"
+            android:paddingTop="10dp">
+
+            <Button
+                android:id="@+id/BMm5"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorAccent"
+                android:text="-5분"
+                android:textColor="#ffffff"/>
+
+            <Button
+                android:id="@+id/BMm1"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorAccent"
+                android:text="-1분"
+                android:textColor="#ffffff"/>
+
+            <EditText
+                android:id="@+id/BMminuteEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="2"
+                android:text="0"
+                android:gravity="right"
+                android:inputType="number" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="분"
+                android:textColor="#fd7d6e"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/BMp1"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorAccent"
+                android:text="+1분"
+                android:textColor="#ffffff"/>
+
+            <Button
+                android:id="@+id/BMp5"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorAccent"
+                android:text="+5분"
+                android:textColor="#ffffff"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_marginTop="50dp"
+            >
+
+            <Button
+                android:id="@+id/BMclose"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="?android:attr/colorBackground"
+                android:text="취소" />
+
+            <Button
+                android:id="@+id/BMsave"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:text="저장"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+
+</RelativeLayout>
